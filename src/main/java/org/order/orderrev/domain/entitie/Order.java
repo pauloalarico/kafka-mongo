@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 
 @Builder
 @Getter
@@ -22,5 +21,13 @@ public class Order {
     private BigDecimal amount;
     private Status status;
     private Instant createdAt;
+
+    public void finish() {
+        this.status = Status.FINISHED;
+    }
+
+    public void cancel() {
+        this.status = Status.CANCELED;
+    }
 }
 
