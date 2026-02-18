@@ -7,3 +7,6 @@ spring:
 
   mongodb:
    uri: ${MONGO_URL}
+
+apps:
+  collection: ${MONGO_COLLECTION_ORDER}

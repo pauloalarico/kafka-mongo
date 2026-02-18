@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 
 @Builder
 @Getter
-@Document
+@Document(collection = "${apps.collection}")
 public class Order {
     @Id
     private String id;
