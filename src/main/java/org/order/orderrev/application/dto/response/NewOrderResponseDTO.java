@@ -1,0 +1,22 @@
+package org.order.orderrev.application.dto.response;
+
+import org.order.orderrev.domain.entitie.Order;
+import org.order.orderrev.domain.enums.Status;
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+
+public record NewOrderResponseDTO(
+        String orderId,
+        String correlationId,
+        Status status,
+        String product,
+        Integer quantity,
+        BigDecimal price,
+        ZonedDateTime createdAt
+){
+    public NewOrderResponseDTO(Order order) {
+        this(order.getId(), order.getCorrelationId(), order.getStatus(), order.getProduct(),
+                order.getQuantity(), order.getAmount(), order.getCreatedAt());
+    }
+}

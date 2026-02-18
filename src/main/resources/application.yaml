@@ -1,0 +1,9 @@
+spring:
+  application:
+   name: order-rev
+
+  kafka:
+   bootstrap-servers: ${KAFKA_SERVER}
+
+  mongodb:
+   uri: ${MONGO_URL}
