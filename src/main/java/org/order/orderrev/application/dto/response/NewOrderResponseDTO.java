@@ -4,7 +4,7 @@ import org.order.orderrev.domain.entitie.Order;
 import org.order.orderrev.domain.enums.Status;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 public record NewOrderResponseDTO(
         String orderId,
@@ -13,7 +13,7 @@ public record NewOrderResponseDTO(
         String product,
         Integer quantity,
         BigDecimal price,
-        ZonedDateTime createdAt
+        Instant createdAt
 ){
     public NewOrderResponseDTO(Order order) {
         this(order.getId(), order.getCorrelationId(), order.getStatus(), order.getProduct(),
