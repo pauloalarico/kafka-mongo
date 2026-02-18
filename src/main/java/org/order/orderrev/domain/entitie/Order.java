@@ -7,11 +7,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 @Builder
 @Getter
-@Document(collection = "${apps.collection}")
+@Document(collection = "order")
 public class Order {
     @Id
     private String id;
@@ -20,6 +21,6 @@ public class Order {
     private Integer quantity;
     private BigDecimal amount;
     private Status status;
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
 }
 
