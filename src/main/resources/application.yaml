@@ -11,5 +11,6 @@ spring:
 
 apps:
   collection: ${MONGO_COLLECTION_ORDER}
+  new-order: ${NEW_ORDER_HEADER}
 server:
   port: 8082
