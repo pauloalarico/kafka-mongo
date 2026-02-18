@@ -8,5 +8,8 @@ spring:
   mongodb:
    uri: ${MONGO_URL}
 
+
 apps:
   collection: ${MONGO_COLLECTION_ORDER}
+server:
+  port: 8082
