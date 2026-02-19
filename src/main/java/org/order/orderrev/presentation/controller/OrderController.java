@@ -1,5 +1,6 @@
 package org.order.orderrev.presentation.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.order.orderrev.application.dto.request.NewOrderRequestDTO;
 import org.order.orderrev.application.dto.response.NewOrderResponseDTO;
@@ -17,8 +18,8 @@ public class OrderController {
     private final CreateNewOrderUseCase newOrderUseCase;
 
     @PostMapping
-    public ResponseEntity<NewOrderResponseDTO> create(@RequestBody NewOrderRequestDTO dto) {
-        var orderDto = newOrderUseCase.create(dto);
+    public ResponseEntity<NewOrderResponseDTO> create(@RequestBody @Valid NewOrderRequestDTO dto) {
+        NewOrderResponseDTO orderDto = newOrderUseCase.create(dto);
         return ResponseEntity.ok(orderDto);
     }
 }
