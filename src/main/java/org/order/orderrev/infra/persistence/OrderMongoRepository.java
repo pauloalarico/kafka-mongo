@@ -1,6 +1,6 @@
-package org.order.orderrev.infra.persistance;
+package org.order.orderrev.infra.persistence;
 
-import org.order.orderrev.domain.entitie.Order;
+import org.order.orderrev.domain.entity.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

@@ -16,10 +16,14 @@ public class OrderProcessConsumer {
 
     private final ActivateOrderUseCase useCase;
 
-    @KafkaListener(topics = "orders-processed-value", groupId = "order-process")
+    @KafkaListener(topics = "${apps.topic-consumer}")
     public void execute(ConsumerRecord<String, OrderProcessDTO> consumerRecord, Acknowledgment acknowledgment) {
-        useCase.verify(consumerRecord.value());
-        acknowledgment.acknowledge();
-        log.info("Order job finished with success!");
+        try {
+            useCase.verify(consumerRecord.value());
+            acknowledgment.acknowledge();
+            log.info("Order job finished with success!");
+        } catch (Exception e) {
+            log.error("Unable to verify the order processed, topic: {}, error: {}", consumerRecord.topic(), e.getMessage());
+        }
     }
 }
