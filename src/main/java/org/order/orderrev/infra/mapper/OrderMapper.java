@@ -1,11 +1,13 @@
 package org.order.orderrev.infra.mapper;
 
 import org.order.orderrev.application.dto.response.NewOrderResponseDTO;
-import org.order.orderrev.domain.entitie.Order;
+import org.order.orderrev.domain.entity.Order;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderMapper {
 
-    public static NewOrderResponseDTO toResponseDto(Order order) {
+    public NewOrderResponseDTO toResponseDto(Order order) {
         return new NewOrderResponseDTO(order);
     }
 }
