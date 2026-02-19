@@ -4,7 +4,8 @@ spring:
 
   kafka:
    bootstrap-servers: ${KAFKA_SERVER}
-
+   consumer:
+     group-id: ${GROUP_ID_ORDER_PROCESS}
   mongodb:
    uri: ${MONGO_URL}
 
@@ -12,5 +13,9 @@ spring:
 apps:
   collection: ${MONGO_COLLECTION_ORDER}
   new-order: ${NEW_ORDER_HEADER}
+  create-order-mapping: ${CREATE_ORDER_MAPPING}
+  dto-package-trust: ${DTO_TRUST_PACKAGE}
+  topic-consumer: ${TOPIC_CONSUMER}
+  order-create-topic: ${ORDER_TOPIC}
 server:
   port: 8082

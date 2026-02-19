@@ -1,5 +1,6 @@
 package org.order.orderrev.infra.kafka.configuration;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -12,19 +13,28 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@Slf4j
 public class KafkaConfiguration {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;
     @Value("${apps.new-order}")
     private String newOrder;
+    @Value("${apps.create-order-mapping}")
+    private String createOrderMapping;
+    @Value("${apps.dto-package-trust}")
+    private String dtoPackagePath;
+    @Value("${apps.order-create-topic}")
+    private String orderTopic;
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
@@ -50,10 +60,9 @@ public class KafkaConfiguration {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JacksonJsonDeserializer.class);
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-process");
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        config.put(JacksonJsonDeserializer.TRUSTED_PACKAGES, "*");
-        config.put(JacksonJsonDeserializer.TYPE_MAPPINGS, "createOrder:org.order.orderrev.application.dto.request.OrderProcessDTO");
+        config.put(JacksonJsonDeserializer.TRUSTED_PACKAGES, dtoPackagePath);
+        config.put(JacksonJsonDeserializer.TYPE_MAPPINGS, createOrderMapping);
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
@@ -63,14 +72,24 @@ public class KafkaConfiguration {
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         factory.setConcurrency(3);
+        factory.setCommonErrorHandler(defaultErrorHandler());
         return factory;
+    }
+
+    @Bean
+    public DefaultErrorHandler defaultErrorHandler() {
+        var backoff = new FixedBackOff(3000L, 3);
+        return new DefaultErrorHandler(((consumerRecord, e) -> {
+            log.error("Unable to process message, failed after 3 retries. Topic: {}, error: {},",
+            consumerRecord.topic() ,e.getMessage());
+        }), backoff);
     }
 
 
     @Bean
     public NewTopic topic() {
         return TopicBuilder
-                .name("order-topic")
+                .name(orderTopic)
                 .partitions(3)
                 .replicas(1)
                 .build();
