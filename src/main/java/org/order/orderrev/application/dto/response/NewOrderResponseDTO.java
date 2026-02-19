@@ -1,6 +1,6 @@
 package org.order.orderrev.application.dto.response;
 
-import org.order.orderrev.domain.entitie.Order;
+import org.order.orderrev.domain.entity.Order;
 import org.order.orderrev.domain.enums.Status;
 
 import java.math.BigDecimal;

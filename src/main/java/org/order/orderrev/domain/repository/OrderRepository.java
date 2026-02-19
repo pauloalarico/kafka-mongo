@@ -1,6 +1,6 @@
 package org.order.orderrev.domain.repository;
 
-import org.order.orderrev.domain.entitie.Order;
+import org.order.orderrev.domain.entity.Order;
 
 import java.util.List;
 import java.util.Optional;
